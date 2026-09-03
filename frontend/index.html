@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GyyxLua — Lua Protector</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<div class="bg-wrap" aria-hidden="true">
+  <div class="bg-blob blob1"></div>
+  <div class="bg-blob blob2"></div>
+  <div class="bg-blob blob3"></div>
+  <div class="sakura-wrap" id="sakuraWrap"></div>
+</div>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">◈</div>
+    <div class="logo-text">
+      <span class="logo-name">GyyxLua</span>
+      <span class="logo-tagline">Lua Protector</span>
+    </div>
+  </div>
+  <div class="header-badges">
+    <span class="badge badge-pink">v3.0</span>
+    <span class="badge badge-yellow">FREE</span>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-kana">ルアコード保護システム</div>
+  <h1>Protect Your<br/><span class="grad-text">Lua Script</span></h1>
+  <p>Dua mode proteksi — obfuscate via Prometheus engine atau enkripsi berbasis link seperti Encrypt-X.</p>
+  <div class="hero-stats">
+    <div class="stat"><span class="stat-num">2</span><span class="stat-lbl">Modes</span></div>
+    <div class="stat-div"></div>
+    <div class="stat"><span class="stat-num">PRO</span><span class="stat-lbl">Engine</span></div>
+    <div class="stat-div"></div>
+    <div class="stat"><span class="stat-num">FREE</span><span class="stat-lbl">Forever</span></div>
+  </div>
+</section>
+
+<main class="wrap">
+
+  <!-- Mode Tabs -->
+  <div class="mode-tabs">
+    <button class="mode-tab active" id="tabObf" data-mode="obf">
+      <span class="tab-icon">🔀</span>
+      <div class="tab-text">
+        <span class="tab-name">Obfuscate</span>
+        <span class="tab-desc">Prometheus engine · Langsung bisa dijalankan</span>
+      </div>
+    </button>
+    <button class="mode-tab" id="tabEnc" data-mode="enc">
+      <span class="tab-icon">🔗</span>
+      <div class="tab-text">
+        <span class="tab-name">Encrypt + Link</span>
+        <span class="tab-desc">Key protection · Simpan di Gist</span>
+      </div>
+    </button>
+  </div>
+
+  <!-- ═══ MODE 1: OBFUSCATE ═══ -->
+  <div id="panelObf" class="mode-panel">
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title"><span class="card-icon">📝</span><span>Input Kode</span></div>
+        <div class="row-gap">
+          <button class="btn-sm" id="obfClearBtn">✕ Clear</button>
+          <label class="btn-sm" for="obfFileUp">📁 Upload</label>
+          <input type="file" id="obfFileUp" accept=".lua,.txt,.luau" hidden/>
+        </div>
+      </div>
+      <div class="editor-wrap">
+        <div class="line-nums" id="obfLineNums">1</div>
+        <textarea id="obfInput" class="code-editor"
+          placeholder="-- Paste kode Lua kamu di sini...&#10;-- Atau upload file .lua / .txt&#10;&#10;local function hello()&#10;    print('Hello from GyyxLua!')&#10;end&#10;hello()"
+          spellcheck="false" autocorrect="off" autocapitalize="off"></textarea>
+      </div>
+      <div class="editor-footer">
+        <span class="editor-info" id="obfInputInfo">0 baris · 0 karakter</span>
+        <span class="editor-lang">Lua 5.1+</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title"><span class="card-icon">⚙️</span><span>Engine Info</span></div>
+      </div>
+      <div class="engine-info-box">
+        <div class="engine-row">
+          <span class="engine-icon">🔥</span>
+          <div>
+            <p class="engine-name">Prometheus Lua Obfuscator</p>
+            <p class="engine-desc">AST-based transformation — variable rename, control flow, string encoding. Hasil 100% bisa dijalankan di Roblox.</p>
+          </div>
+        </div>
+      </div>
+      <p class="mode-note">ℹ️ Mode ini membutuhkan koneksi internet untuk proses obfuscation. Key & Custom ID tidak digunakan di mode ini.</p>
+    </div>
+
+    <button class="btn-main" id="obfBtn">
+      <span class="btn-icon-main">◈</span>
+      <span id="obfBtnLabel">Obfuscate Sekarang</span>
+    </button>
+
+    <div class="progress-wrap" id="obfProgress" style="display:none">
+      <div class="progress-bar"><div class="progress-fill" id="obfFill"></div></div>
+      <p class="progress-text" id="obfProgText">Menghubungi Prometheus engine...</p>
+    </div>
+
+    <div class="card card-output" id="obfOutputCard" style="display:none">
+      <div class="card-header">
+        <div class="card-title"><span class="card-icon">✨</span><span>Hasil Obfuscate</span></div>
+        <div class="row-gap">
+          <button class="btn-sm btn-copy" id="obfCopyBtn">📋 Copy</button>
+          <button class="btn-sm btn-download" id="obfDownBtn">⬇ Download</button>
+        </div>
+      </div>
+      <div class="editor-wrap">
+        <div class="line-nums" id="obfOutputNums">1</div>
+        <textarea id="obfOutput" class="code-editor" readonly spellcheck="false"></textarea>
+      </div>
+      <div class="editor-footer">
+        <span class="editor-info" id="obfOutputInfo">—</span>
+        <div class="output-stats" id="obfStats"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══ MODE 2: ENCRYPT + LINK ═══ -->
+  <div id="panelEnc" class="mode-panel" style="display:none">
+
+    <div class="card card-token">
+      <div class="card-header">
+        <div class="card-title"><span class="card-icon">🐙</span><span>GitHub Setup</span></div>
+        <span class="badge badge-pink">SEKALI SAJA</span>
+      </div>
+      <p class="card-desc">Mode ini menyimpan script ke GitHub Gist. Masukkan GitHub Personal Access Token kamu.</p>
+      <div class="field-row">
+        <input type="password" id="ghToken" class="setting-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off" spellcheck="false"/>
+        <button class="btn-eye" id="toggleToken">👁</button>
+      </div>
+      <p id="tokenStatus" style="font-size:11px;margin-top:6px;font-family:var(--mono);min-height:16px;"></p>
+      <p class="field-hint">
+        Buat di <a href="https://github.com/settings/tokens/new" target="_blank">github.com/settings/tokens</a>
+        → pilih <strong>Tokens (classic)</strong> → centang scope <strong>gist</strong> saja → Generate.
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title"><span class="card-icon">📝</span><span>Input Kode</span></div>
+        <div class="row-gap">
+          <button class="btn-sm" id="encClearBtn">✕ Clear</button>
+          <label class="btn-sm" for="encFileUp">📁 Upload</label>
+          <input type="file" id="encFileUp" accept=".lua,.txt,.luau" hidden/>
+        </div>
+      </div>
+      <div class="editor-wrap">
+        <div class="line-nums" id="encLineNums">1</div>
+        <textarea id="encInput" class="code-editor"
+          placeholder="-- Paste kode yang mau diproteksi via link..."
+          spellcheck="false" autocorrect="off" autocapitalize="off"></textarea>
+      </div>
+      <div class="editor-footer">
+        <span class="editor-info" id="encInputInfo">0 baris · 0 karakter</span>
+        <span class="editor-lang">Lua 5.1+</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title"><span class="card-icon">🔑</span><span>Proteksi</span></div>
+      </div>
+      <div class="settings-grid">
+        <div class="setting-group">
+          <label class="setting-label">🔑 Access Key <span class="setting-hint">Wajib — dibutuhkan untuk menjalankan script</span></label>
+          <div class="field-row">
+            <input type="text" id="encKey" class="setting-input" placeholder="Contoh: Gyzeen2kPREM" maxlength="64" spellcheck="false" autocomplete="off"/>
+            <button class="btn-gen" id="encGenKey">🎲</button>
+          </div>
+        </div>
+        <div class="setting-group">
+          <label class="setting-label">🪪 Custom ID / Nama Gist <span class="setting-hint">Opsional</span></label>
+          <input type="text" id="encCustomId" class="setting-input" placeholder="Contoh: MyAwesomeScript" maxlength="60" spellcheck="false"/>
+        </div>
+      </div>
+      <p class="mode-note">ℹ️ Hasil berupa loadstring link. Siapapun yang coba jalankan tanpa key yang benar akan di-error.</p>
+    </div>
+
+    <button class="btn-main btn-main-enc" id="encBtn">
+      <span class="btn-icon-main">🔗</span>
+      <span id="encBtnLabel">Encrypt & Upload ke Gist</span>
+    </button>
+
+    <div class="progress-wrap" id="encProgress" style="display:none">
+      <div class="progress-bar"><div class="progress-fill" id="encFill"></div></div>
+      <p class="progress-text" id="encProgText">Mengenkripsi kode...</p>
+    </div>
+
+    <div class="card card-output" id="encOutputCard" style="display:none">
+      <div class="card-header">
+        <div class="card-title"><span class="card-icon">🔗</span><span>Link Script Kamu</span></div>
+        <button class="btn-sm btn-copy" id="encCopyBtn">📋 Copy</button>
+      </div>
+      <div class="result-box" id="encResult">—</div>
+      <div class="gist-info" id="gistInfo" style="display:none">
+        <div class="gist-row">
+          <span class="gist-label">🐙 Gist URL (untuk edit/update)</span>
+          <a id="gistUrl" href="#" target="_blank" class="gist-link">—</a>
+        </div>
+        <div class="gist-row">
+          <span class="gist-label">🔑 Key yang dipakai</span>
+          <code id="gistKey" class="gist-value">—</code>
+        </div>
+        <div class="gist-row">
+          <span class="gist-label">📋 Cara pakai</span>
+          <code class="gist-value" style="color:var(--yellow-light)">Paste hasil di atas ke script executor (Delta dll)</code>
+        </div>
+      </div>
+      <p class="enc-note">⚠️ Simpan key kamu — tidak bisa direcovery jika hilang.</p>
+    </div>
+
+  </div>
+
+  <!-- Info Grid -->
+  <div class="info-grid">
+    <div class="info-card">
+      <div class="info-icon">🔥</div>
+      <h3>Prometheus Engine</h3>
+      <p>Mode Obfuscate pakai Prometheus — AST-based Lua obfuscator terpercaya. Hasil selalu bisa dijalankan.</p>
+    </div>
+    <div class="info-card">
+      <div class="info-icon">🔗</div>
+      <h3>Encrypt + Link</h3>
+      <p>Kode dienkripsi dan disimpan di GitHub Gist private kamu. Hasil loadstring link — kayak Encrypt-X.</p>
+    </div>
+    <div class="info-card">
+      <div class="info-icon">🔑</div>
+      <h3>Key Protection</h3>
+      <p>Mode Encrypt: script mati tanpa key yang benar. Proteksi eksekusi script kamu dari orang lain.</p>
+    </div>
+    <div class="info-card">
+      <div class="info-icon">🌸</div>
+      <h3>100% Gratis</h3>
+      <p>Tidak ada biaya. Mode Encrypt pakai GitHub Gist milikmu sendiri — kamu yang punya kendali penuh.</p>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <div class="footer-logo">◈ GyyxLua</div>
+  <p>Mode Obfuscate powered by Prometheus Lua Obfuscator</p>
+  <p class="footer-kana">あなたのコードを守る · v3.0</p>
+</footer>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="engine/obfuscator.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
